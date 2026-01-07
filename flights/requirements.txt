@@ -1,6 +1,7 @@
 Flask==3.0.3
 flasgger==0.9.7.1
 Flask-Cors==5.0.0
-python-dotenv
 opentelemetry-distro
 opentelemetry-exporter-otlp
+opentelemetry-instrumentation
+opentelemetry-instrumentation-flask

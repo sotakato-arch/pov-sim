@@ -26,4 +26,4 @@ ENV OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED="true"
 ENV OTEL_EXPORTER_OTLP_HEADERS="Authorization=Basic MTQ1ODY0ODpnbGNfZXlKdklqb2lNVFl3TlRZM01TSXNJbTRpT2lKemRHRmpheTB4TkRVNE5qUTRMVzkwYkhBdGQzSnBkR1V0Wm14cFoyaDBMWE5wYlMxa1pXMXZJaXdpYXlJNklqUTNibWR1T1dsNGVXUTJOMFZvVnpZeU5VSkZVRTA0TmlJc0ltMGlPbnNpY2lJNkluQnliMlF0WVhBdGJtOXlkR2hsWVhOMExUQWlmWDA9"
 # Specify the command to run your Flask app
 
-CMD ["opentelemetry-instrument", "python3", "-m", "flask", "run", "--host=0.0.0.0", "--port=5001"]
+CMD ["opentelemetry-instrument", "--traces_exporter", "otlp", "--metrics_exporter", "otlp", "python3", "-m", "flask", "run", "--host=0.0.0.0", "--port=5001"]
