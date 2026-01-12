@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.37.0 (HEAD)
+  labels:
+    io.kompose.service: airlines
+  name: airlines
+  namespace: pov-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: airlines
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml
+        kompose.version: 1.37.0 (HEAD)
+      labels:
+        io.kompose.service: airlines
+    spec:
+      containers:
+        image: pov-sim-airlines:latest
+        name: airlines
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8080
+            protocol: TCP
+      restartPolicy: Always

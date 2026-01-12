@@ -2,7 +2,12 @@ from flasgger import Swagger
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from utils import get_random_int
+import pyroscope
 
+pyroscope.configure(
+  application_name = "flights", # replace this with some name for your application
+  server_address   = "http://my-alloy.alloy.svc.cluster.local:4040"
+)
 app = Flask(__name__)
 Swagger(app)
 CORS(app)

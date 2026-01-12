@@ -20,10 +20,11 @@ RUN opentelemetry-bootstrap -a install
 EXPOSE 5001
 
 ENV OTEL_RESOURCE_ATTRIBUTES="service.name=flights,service.namespace=flightsim,deployment.environment=sandbox"
-ENV OTEL_EXPORTER_OTLP_ENDPOINT="https://otlp-gateway-prod-ap-northeast-0.grafana.net/otlp"
-ENV OTEL_EXPORTER_OTLP_PROTOCOL="http/protobuf"
+ENV OTEL_EXPORTER_OTLP_ENDPOINT="http://grafana-k8s-monitoring-alloy-receiver.default.svc.cluster.local:4317"
+ENV OTEL_EXPORTER_OTLP_PROTOCOL="grpc"
 ENV OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED="true"
-ENV OTEL_EXPORTER_OTLP_HEADERS="Authorization=Basic MTQ1ODY0ODpnbGNfZXlKdklqb2lNVFl3TlRZM01TSXNJbTRpT2lKemRHRmpheTB4TkRVNE5qUTRMVzkwYkhBdGQzSnBkR1V0Wm14cFoyaDBMWE5wYlMxa1pXMXZJaXdpYXlJNklqUTNibWR1T1dsNGVXUTJOMFZvVnpZeU5VSkZVRTA0TmlJc0ltMGlPbnNpY2lJNkluQnliMlF0WVhBdGJtOXlkR2hsWVhOMExUQWlmWDA9"
+ENV PYROSCOPE_SERVER_ADDRESS="http://my-alloy.alloy.svc.cluster.local:4040"
+# ENV OTEL_EXPORTER_OTLP_HEADERS="Authorization=Basic ${OTEL_AUTH_TOKEN}"
 # Specify the command to run your Flask app
 
 CMD ["opentelemetry-instrument", "--traces_exporter", "otlp", "--metrics_exporter", "otlp", "python3", "-m", "flask", "run", "--host=0.0.0.0", "--port=5001"]
