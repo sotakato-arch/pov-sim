@@ -6,7 +6,7 @@ import pyroscope
 
 pyroscope.configure(
   application_name = "flights", # replace this with some name for your application
-  server_address   = "http://my-alloy.alloy.svc.cluster.local:4040"
+  server_address   = "http://grafana-k8s-monitoring-alloy-receiver.default.svc.cluster.local:4040"
 )
 app = Flask(__name__)
 Swagger(app)

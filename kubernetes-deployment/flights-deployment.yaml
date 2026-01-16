@@ -22,10 +22,10 @@ spec:
         io.kompose.service: flights
     spec:
       containers:
-        - image: pov-sim-flights:latest
-          name: flights
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 5001
-              protocol: TCP
-      restartPolicy: Always
+      - image: pov-sim-flights:latest
+        name: flights
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5001
+          protocol: TCP
+        restartPolicy: Always

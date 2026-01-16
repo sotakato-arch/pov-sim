@@ -4,7 +4,7 @@ import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
+import { getWebInstrumentations, initializeFaro } from '@grafana/faro-react';
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
 
 initializeFaro({

@@ -22,10 +22,10 @@ spec:
         io.kompose.service: airlines
     spec:
       containers:
-        image: pov-sim-airlines:latest
+      - image: pov-sim-airlines:latest
         name: airlines
         imagePullPolicy: Always
         ports:
-          - containerPort: 8080
-            protocol: TCP
-      restartPolicy: Always
+        - containerPort: 8080
+          protocol: TCP
+        restartPolicy: Always
