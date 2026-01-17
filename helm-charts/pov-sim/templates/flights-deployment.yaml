@@ -1,0 +1,62 @@
+{{- if .Values.flights.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pov-sim.fullname" . }}-flights
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "pov-sim.flights.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.flights.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "pov-sim.flights.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "pov-sim.flights.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "pov-sim.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: flights
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        image: "{{ .Values.flights.image.repository }}:{{ .Values.flights.image.tag }}"
+        imagePullPolicy: {{ .Values.flights.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.flights.service.targetPort }}
+          protocol: TCP
+        {{- if .Values.flights.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.flights.livenessProbe.httpGet.path }}
+            port: {{ .Values.flights.livenessProbe.httpGet.port }}
+          initialDelaySeconds: {{ .Values.flights.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.flights.livenessProbe.periodSeconds }}
+        {{- end }}
+        {{- if .Values.flights.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.flights.readinessProbe.httpGet.path }}
+            port: {{ .Values.flights.readinessProbe.httpGet.port }}
+          initialDelaySeconds: {{ .Values.flights.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.flights.readinessProbe.periodSeconds }}
+        {{- end }}
+        resources:
+          {{- toYaml .Values.flights.resources | nindent 10 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

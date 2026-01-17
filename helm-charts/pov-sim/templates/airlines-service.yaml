@@ -1,0 +1,18 @@
+{{- if .Values.airlines.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: airlines
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "pov-sim.airlines.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.airlines.service.type }}
+  ports:
+  - port: {{ .Values.airlines.service.port }}
+    targetPort: http
+    protocol: TCP
+    name: http
+  selector:
+    {{- include "pov-sim.airlines.selectorLabels" . | nindent 4 }}
+{{- end }}

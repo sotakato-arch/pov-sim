@@ -1,0 +1,12 @@
+apiVersion: v2
+name: pov-sim
+description: A Helm chart for PoV Flight Simulator application
+version: 0.1.0
+appVersion: 1.0.0
+maintainers:
+  - name: PoV Team
+keywords:
+  - flight-simulator
+  - airlines
+  - flights
+  - frontend

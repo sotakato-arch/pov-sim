@@ -1,0 +1,62 @@
+{{- if .Values.airlines.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pov-sim.fullname" . }}-airlines
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "pov-sim.airlines.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.airlines.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "pov-sim.airlines.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "pov-sim.airlines.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "pov-sim.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: airlines
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        image: "{{ .Values.airlines.image.repository }}:{{ .Values.airlines.image.tag }}"
+        imagePullPolicy: {{ .Values.airlines.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.airlines.service.targetPort }}
+          protocol: TCP
+        {{- if .Values.airlines.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.airlines.livenessProbe.httpGet.path }}
+            port: {{ .Values.airlines.livenessProbe.httpGet.port }}
+          initialDelaySeconds: {{ .Values.airlines.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.airlines.livenessProbe.periodSeconds }}
+        {{- end }}
+        {{- if .Values.airlines.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.airlines.readinessProbe.httpGet.path }}
+            port: {{ .Values.airlines.readinessProbe.httpGet.port }}
+          initialDelaySeconds: {{ .Values.airlines.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.airlines.readinessProbe.periodSeconds }}
+        {{- end }}
+        resources:
+          {{- toYaml .Values.airlines.resources | nindent 10 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

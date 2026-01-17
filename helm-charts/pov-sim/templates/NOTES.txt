@@ -1,0 +1,53 @@
+Thank you for installing {{ .Chart.Name }}!
+
+Your PoV Flight Simulator application has been deployed to namespace: {{ .Values.global.namespace }}
+
+To get the status of your deployment:
+
+  kubectl get pods -n {{ .Values.global.namespace }}
+
+{{- if .Values.airlines.enabled }}
+
+Airlines Service:
+  Service URL: http://airlines.{{ .Values.global.namespace }}.svc.cluster.local:{{ .Values.airlines.service.port }}
+  Swagger UI: http://airlines.{{ .Values.global.namespace }}.svc.cluster.local:{{ .Values.airlines.service.port }}/swagger-ui/index.html
+{{- end }}
+
+{{- if .Values.flights.enabled }}
+
+Flights Service:
+  Service URL: http://flights.{{ .Values.global.namespace }}.svc.cluster.local:{{ .Values.flights.service.port }}
+  API Docs: http://flights.{{ .Values.global.namespace }}.svc.cluster.local:{{ .Values.flights.service.port }}/apidocs/
+{{- end }}
+
+{{- if .Values.frontend.enabled }}
+
+Frontend Service:
+{{- if eq .Values.frontend.service.type "LoadBalancer" }}
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+
+  Run the following command to get the external IP:
+
+    kubectl get svc frontend -n {{ .Values.global.namespace }} --watch
+
+  Once the EXTERNAL-IP is available, access the frontend at:
+
+    http://<EXTERNAL-IP>:{{ .Values.frontend.service.port }}
+{{- else if eq .Values.frontend.service.type "NodePort" }}
+
+  Get the application URL by running:
+
+    export NODE_PORT=$(kubectl get svc frontend -n {{ .Values.global.namespace }} -o jsonpath='{.spec.ports[0].nodePort}')
+    export NODE_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[0].address}')
+    echo "http://$NODE_IP:$NODE_PORT"
+{{- else }}
+
+  Access the frontend using port-forward:
+
+    kubectl port-forward -n {{ .Values.global.namespace }} svc/frontend {{ .Values.frontend.service.port }}:{{ .Values.frontend.service.port }}
+
+  Then visit: http://localhost:{{ .Values.frontend.service.port }}
+{{- end }}
+{{- end }}
+
+For more information, visit: https://github.com/aninamu/pov-sim
