@@ -1,17 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -f docker-compose.yml
-    kompose.version: 1.37.0 (HEAD)
-  labels:
-    io.kompose.service: airlines
   name: airlines
   namespace: pov-project
+  labels:
+    app: airlines
 spec:
-  ports:
-    - name: "8080"
-      port: 8080
-      targetPort: 8080
   selector:
-    io.kompose.service: airlines
+    app: airlines
+  ports:
+  - port: 8080
+    targetPort: 8080
